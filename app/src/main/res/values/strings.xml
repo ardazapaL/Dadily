@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Dadily</string>
+    <string name="brand_name">Arda Food</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="Signup">Sign up</string>
+    <string name="prompt_fill_email">Type your email here</string>
+    <string name="prompt_fill_password">Type your password here</string>
+    <string name="empty_field">This field cannot be blank</string>
+    <string name="prompt_dairy">Dairy</string>
+    <string name="prompt_memory">Memory</string>
+    <string name="prompt_add_daily">Add Your Daily</string>
+</resources>
