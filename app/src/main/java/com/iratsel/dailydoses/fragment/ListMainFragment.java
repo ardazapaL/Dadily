@@ -21,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iratsel.dailydoses.MainActivity;
 import com.iratsel.dailydoses.R;
 import com.iratsel.dailydoses.adapter.ListMainAdapter;
+import com.iratsel.dailydoses.controllers.DairyController;
 import com.iratsel.dailydoses.controllers.UserController;
 import com.iratsel.dailydoses.model.ListMainModel;
 import com.iratsel.dailydoses.utils.Database;
@@ -47,7 +48,8 @@ public class ListMainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_list, container, false);
 
         Database database = new DatabaseHelper(getContext());
-        UserController.setDatabase(database);
+        DairyController.setDatabase(database);
+
         sharedPreferences = this.getActivity().getSharedPreferences(Tag.SP, Context.MODE_PRIVATE);
 
         myDb = new DatabaseHelper(getActivity());
@@ -58,7 +60,7 @@ public class ListMainFragment extends Fragment {
         res = myDb.getAllDairy(email);
         if(res.getCount() == 0) {
             // show message
-            showMessage("Error","Nothing Found");
+            showMessage("Hey you there","Let's make your first dairy ^^");
         } else {
             fetchData();
         }
@@ -78,9 +80,9 @@ public class ListMainFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                adapter.notifyDataSetChanged();
                 fetchData();
                 adapter = new ListMainAdapter(listMain);
+                adapter.notifyDataSetChanged();
                 recyclerView.setAdapter(adapter);
             }
         });
