@@ -7,13 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.iratsel.dailydoses.adapter.ListMainAdapter;
 import com.iratsel.dailydoses.controllers.DairyController;
-import com.iratsel.dailydoses.fragment.ListMainFragment;
 import com.iratsel.dailydoses.utils.Database;
 import com.iratsel.dailydoses.utils.DatabaseHelper;
 import com.iratsel.dailydoses.utils.Tag;
@@ -72,7 +69,7 @@ public class AddDairyActivity extends AppCompatActivity {
         return formattedDate;
     }
 
-    private void add() {
+    private boolean add() {
         String email = sharedPreferences.getString(Tag.EMAIL, null);
         String date = text_date.getText().toString();
         String headline = text_headline.getText().toString();
@@ -84,6 +81,10 @@ public class AddDairyActivity extends AppCompatActivity {
         contentValues.put("headline", headline);
         contentValues.put("description", desc);
 
-        DairyController.getInstance().add(contentValues);
+        long result = DairyController.getInstance().add(contentValues);
+        if(result == -1)
+            return false;
+        else
+            return true;
     }
 }
