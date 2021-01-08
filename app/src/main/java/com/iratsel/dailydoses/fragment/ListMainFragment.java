@@ -1,5 +1,7 @@
 package com.iratsel.dailydoses.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import com.iratsel.dailydoses.controllers.UserController;
 import com.iratsel.dailydoses.model.ListMainModel;
 import com.iratsel.dailydoses.utils.Database;
 import com.iratsel.dailydoses.utils.DatabaseHelper;
+import com.iratsel.dailydoses.utils.Tag;
 
 import java.util.ArrayList;
 
@@ -35,6 +38,8 @@ public class ListMainFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Cursor res;
 
+    SharedPreferences sharedPreferences;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,12 +48,14 @@ public class ListMainFragment extends Fragment {
 
         Database database = new DatabaseHelper(getContext());
         UserController.setDatabase(database);
+        sharedPreferences = this.getActivity().getSharedPreferences(Tag.SP, Context.MODE_PRIVATE);
 
         myDb = new DatabaseHelper(getActivity());
         listMain = new ArrayList<>();
 
+        String email = sharedPreferences.getString("email", null);
         //addData();
-        res = myDb.getAllDairy();
+        res = myDb.getAllDairy(email);
         if(res.getCount() == 0) {
             // show message
             showMessage("Error","Nothing Found");
@@ -61,6 +68,7 @@ public class ListMainFragment extends Fragment {
 
         /* recycler view */
         adapter = new ListMainAdapter(listMain);
+        adapter.notifyDataSetChanged();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -81,16 +89,25 @@ public class ListMainFragment extends Fragment {
 
     public void fetchData() {
         while(res.moveToNext()){
-            String date = res.getString(1);
-            String headline = res.getString(2);
-            String desc = res.getString(3);
+            String date = res.getString(2);
+            String headline = res.getString(3);
+            String desc = res.getString(4);
 
             listMain.add(new ListMainModel(date, headline, desc));
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
+        adapter = new ListMainAdapter(listMain);
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         adapter = new ListMainAdapter(listMain);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);

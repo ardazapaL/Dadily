@@ -40,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Database {
 
         db.execSQL("CREATE TABLE " + DatabaseContents.TABLE_DAIRY + "("
                 + "_id INTEGER PRIMARY KEY,"
+                + "email TEXT(32),"
                 + "date TEXT(100),"
                 + "headline TEXT(32),"
                 + "description TEXT(256)"
@@ -88,9 +89,9 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Database {
         }
     }
 
-    public Cursor getAllDairy() {
+    public Cursor getAllDairy(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from dairy", null);  return res;
+        Cursor res = db.rawQuery("SELECT * FROM dairy WHERE email = '" + email + "'", null);  return res;
     }
 
     @Override

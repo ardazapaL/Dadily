@@ -3,7 +3,9 @@ package com.iratsel.dailydoses;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import com.iratsel.dailydoses.controllers.DairyController;
 import com.iratsel.dailydoses.fragment.ListMainFragment;
 import com.iratsel.dailydoses.utils.Database;
 import com.iratsel.dailydoses.utils.DatabaseHelper;
+import com.iratsel.dailydoses.utils.Tag;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,6 +28,8 @@ public class AddDairyActivity extends AppCompatActivity {
     private Button btn_add;
     private Database database;
 
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +38,8 @@ public class AddDairyActivity extends AppCompatActivity {
         /* Database */
         database = new DatabaseHelper(this);
         DairyController.setDatabase(database);
+
+        sharedPreferences = getSharedPreferences(Tag.SP, Context.MODE_PRIVATE);
 
         text_date = findViewById(R.id.field_date);
         text_headline = findViewById(R.id.field_headline);
@@ -66,11 +73,13 @@ public class AddDairyActivity extends AppCompatActivity {
     }
 
     private void add() {
+        String email = sharedPreferences.getString(Tag.EMAIL, null);
         String date = text_date.getText().toString();
         String headline = text_headline.getText().toString();
         String desc = text_desc.getText().toString();
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put("email", email);
         contentValues.put("date", date);
         contentValues.put("headline", headline);
         contentValues.put("description", desc);
