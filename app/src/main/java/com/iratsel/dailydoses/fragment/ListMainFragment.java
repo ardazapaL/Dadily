@@ -27,6 +27,7 @@ import com.iratsel.dailydoses.model.ListMainModel;
 import com.iratsel.dailydoses.utils.Database;
 import com.iratsel.dailydoses.utils.DatabaseHelper;
 import com.iratsel.dailydoses.utils.Tag;
+import com.iratsel.dailydoses.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -56,6 +57,7 @@ public class ListMainFragment extends Fragment {
         listMain = new ArrayList<>();
 
         String email = sharedPreferences.getString("email", null);
+
         //addData();
         res = myDb.getAllDairy(email);
         if(res.getCount() == 0) {
@@ -64,6 +66,7 @@ public class ListMainFragment extends Fragment {
         } else {
             fetchData();
         }
+
         /* initialize */
         recyclerView = view.findViewById(R.id.main_recycler);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
@@ -88,13 +91,20 @@ public class ListMainFragment extends Fragment {
     }
 
     public void fetchData() {
-        while(res.moveToNext()){
-            String date = res.getString(2);
-            String headline = res.getString(3);
-            String desc = res.getString(4);
+        /*res = myDb.insert("dairy", new String[] {
+                "date",
+                "headline",
+                "desc"}, null, null, null);*/
 
-            listMain.add(new ListMainModel(date, headline, desc));
+        while(res.moveToNext()){
+            byte[] blob = res.getBlob(2);
+            String date = res.getString(3);
+            String headline = res.getString(4);
+            String desc = res.getString(5);
+
+            listMain.add(new ListMainModel(Utility.getPhoto(blob), date, headline, desc));
         }
+        res.close();
     }
 
     @Override

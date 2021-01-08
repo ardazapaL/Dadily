@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Database {
         db.execSQL("CREATE TABLE " + DatabaseContents.TABLE_DAIRY + "("
                 + "_id INTEGER PRIMARY KEY,"
                 + "email TEXT(32),"
+                + "image BLOB DEFAULT x'00',"
                 + "date TEXT(100),"
                 + "headline TEXT(32),"
                 + "description TEXT(256)"

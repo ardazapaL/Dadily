@@ -1,12 +1,16 @@
 package com.iratsel.dailydoses.model;
 
+import android.graphics.Bitmap;
+
 public class ListMainModel {
 
+    private Bitmap image;
     private String date;
     private String headline;
     private String description;
 
-    public ListMainModel(String date, String headline, String description) {
+    public ListMainModel(Bitmap image, String date, String headline, String description) {
+        this.image = image;
         this.date = date;
         this.headline = headline;
         this.description = description;
@@ -34,5 +38,13 @@ public class ListMainModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 }
