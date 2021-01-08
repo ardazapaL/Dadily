@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iratsel.dailydoses.MainActivity;
@@ -30,6 +31,9 @@ public class ListMainFragment extends Fragment {
     private ArrayList<ListMainModel> listMain;
     private RecyclerView recyclerView;
     private DatabaseHelper myDb;
+    private ListMainAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Cursor res;
 
     @Nullable
     @Override
@@ -41,32 +45,60 @@ public class ListMainFragment extends Fragment {
         UserController.setDatabase(database);
 
         myDb = new DatabaseHelper(getActivity());
+        listMain = new ArrayList<>();
 
-        addData();
-        Cursor res = myDb.getAllDairy();
+        //addData();
+        res = myDb.getAllDairy();
         if(res.getCount() == 0) {
             // show message
             showMessage("Error","Nothing Found");
         } else {
-            while(res.moveToNext()){
-                String date = res.getString(1);
-                String headline = res.getString(2);
-                String desc = res.getString(3);
-
-                listMain = new ArrayList<>();
-                listMain.add(new ListMainModel(date, headline, desc));
-            }
+            fetchData();
         }
         /* initialize */
         recyclerView = view.findViewById(R.id.main_recycler);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 
         /* recycler view */
-        ListMainAdapter adapter = new ListMainAdapter(listMain);
+        adapter = new ListMainAdapter(listMain);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        
+
+        // SetOnRefreshListener on SwipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                adapter.notifyDataSetChanged();
+                fetchData();
+                adapter = new ListMainAdapter(listMain);
+                recyclerView.setAdapter(adapter);
+            }
+        });
         return view;
+    }
+
+    public void fetchData() {
+        while(res.moveToNext()){
+            String date = res.getString(1);
+            String headline = res.getString(2);
+            String desc = res.getString(3);
+
+            listMain.add(new ListMainModel(date, headline, desc));
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter = new ListMainAdapter(listMain);
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void updateListView() {
+        adapter = new ListMainAdapter(listMain);
+        adapter.notifyDataSetChanged();
     }
 
     /* ALERT FUNCTION */
@@ -77,17 +109,4 @@ public class ListMainFragment extends Fragment {
         builder.show();
     }
 
-    private void addData() {
-        listMain = new ArrayList<>();
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-    }
 }

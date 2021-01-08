@@ -2,8 +2,6 @@ package com.iratsel.dailydoses;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
@@ -19,14 +17,11 @@ import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.iratsel.dailydoses.adapter.ListMainAdapter;
 import com.iratsel.dailydoses.adapter.TabAdapter;
 import com.iratsel.dailydoses.controllers.UserController;
-import com.iratsel.dailydoses.fragment.EditNameDialogFragment;
+import com.iratsel.dailydoses.fragment.AddDairyFragment;
 import com.iratsel.dailydoses.fragment.ListMainFragment;
-import com.iratsel.dailydoses.fragment.LoginFragment;
 import com.iratsel.dailydoses.fragment.MemoryFragment;
-import com.iratsel.dailydoses.fragment.SignupFragment;
 import com.iratsel.dailydoses.model.ListMainModel;
 import com.iratsel.dailydoses.utils.Database;
 import com.iratsel.dailydoses.utils.DatabaseHelper;
@@ -56,41 +51,50 @@ public class MainActivity extends AppCompatActivity {
 
         Database database = new DatabaseHelper(this);
         UserController.setDatabase(database);
+        sharedpreferences = getSharedPreferences(Tag.SP, Context.MODE_PRIVATE);
 
         viewPager = findViewById(R.id.view_pager_main);
         tabLayout = findViewById(R.id.tab_layout_main);
         fab = findViewById(R.id.fab_add);
 
+        /* tab icons */
+        int[] tabIcons = {
+                R.drawable.ic_baseline_view_list_24,
+                R.drawable.ic_baseline_collections_24};
+
+        /* add fragment to tab adapter */
         tabAdapter = new TabAdapter(getSupportFragmentManager());
-        tabAdapter.addFragment(new ListMainFragment(), getString(R.string.prompt_dairy));
-        tabAdapter.addFragment(new MemoryFragment(), getString(R.string.prompt_memory));
+        tabAdapter.addFragment(new ListMainFragment(), null);
+        tabAdapter.addFragment(new MemoryFragment(), null);
+
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditDialog();
-                Log.d("PRESSED", "FAB IS PRESSED");
-            }
+        /* set icon tab layout */
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+
+        fab.setOnClickListener(v -> {
+            Intent goAddDairy = new Intent(MainActivity.this, AddDairyActivity.class);
+            startActivity(goAddDairy);
+            Log.d("PRESSED", "FAB IS PRESSED");
         });
 
-        sharedpreferences = getSharedPreferences(Tag.SP, Context.MODE_PRIVATE);
+        /*ListMainFragment listMainFragment = new ListMainFragment();
+        listMainFragment.updateListView();*/
     }
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        ListMainFragment listMainFragment = new ListMainFragment();
+        listMainFragment.updateListView();
+    }*/
 
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance("Some Title");
+        AddDairyFragment editNameDialogFragment = AddDairyFragment.newInstance(getString(R.string.prompt_add_dairy));
         editNameDialogFragment.show(fm, "fragment_edit_name");
-    }
-
-    private void addData() {
-        listMain = new ArrayList<>();
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
-        listMain.add(new ListMainModel("Date","Headline", "Description"));
     }
 
     private void logout() {

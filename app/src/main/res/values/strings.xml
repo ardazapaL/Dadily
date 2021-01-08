@@ -11,4 +11,5 @@
     <string name="prompt_dairy">Dairy</string>
     <string name="prompt_memory">Memory</string>
     <string name="prompt_add_daily">Add Your Daily</string>
+    <string name="prompt_add_dairy">Add Your Dairy :)</string>
 </resources>

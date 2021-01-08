@@ -14,12 +14,13 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.iratsel.dailydoses.adapter.TabAdapter;
+import com.iratsel.dailydoses.adapter.TabLoginAdapter;
 import com.iratsel.dailydoses.fragment.LoginFragment;
 import com.iratsel.dailydoses.fragment.SignupFragment;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TabAdapter tabAdapter;
+    private TabLoginAdapter tabAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -37,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
 
-        tabAdapter = new TabAdapter(getSupportFragmentManager());
+        tabAdapter = new TabLoginAdapter(getSupportFragmentManager());
         tabAdapter.addFragment(new LoginFragment(), getString(R.string.login));
         tabAdapter.addFragment(new SignupFragment(), getString(R.string.Signup));
         viewPager.setAdapter(tabAdapter);

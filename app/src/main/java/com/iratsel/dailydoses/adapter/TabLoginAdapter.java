@@ -8,12 +8,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabAdapter extends FragmentStatePagerAdapter {
+public class TabLoginAdapter extends FragmentStatePagerAdapter {
 
     private final List<Fragment> fragmentList = new ArrayList<>();
     private final List<String> fragmentTitleList = new ArrayList<>();
 
-    public TabAdapter(@NonNull FragmentManager fm) {
+    public TabLoginAdapter(@NonNull FragmentManager fm) {
         super(fm);
     }
 
@@ -24,8 +24,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        //return fragmentTitleList.get(position);
-        return null;
+        return fragmentTitleList.get(position);
     }
 
     @NonNull
