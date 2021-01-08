@@ -34,7 +34,6 @@ public class ListMainAdapter extends RecyclerView.Adapter<ListMainAdapter.ListMa
 
     @Override
     public void onBindViewHolder(@NonNull ListMainViewHolder holder, int position) {
-//        Glide.with(holder.imageView.getContext()).load(R.drawable.ic_splash);
         holder.imageView.setImageBitmap(listMain.get(position).getImage());
         holder.headline.setText(listMain.get(position).getHeadline());
         holder.desc.setText(listMain.get(position).getDescription());

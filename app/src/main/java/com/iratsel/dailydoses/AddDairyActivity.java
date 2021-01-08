@@ -1,36 +1,28 @@
 package com.iratsel.dailydoses;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.iratsel.dailydoses.controllers.DairyController;
-import com.iratsel.dailydoses.model.ListMainModel;
 import com.iratsel.dailydoses.utils.Database;
 import com.iratsel.dailydoses.utils.DatabaseHelper;
 import com.iratsel.dailydoses.utils.Tag;
-import com.iratsel.dailydoses.utils.Utility;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Blob;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +35,6 @@ public class AddDairyActivity extends AppCompatActivity {
     private ImageView imageView;
 
     SharedPreferences sharedPreferences;
-    Uri imageUri;
     Bitmap bitmap = null;
     byte img[];
 
@@ -57,7 +48,6 @@ public class AddDairyActivity extends AppCompatActivity {
         /* Database */
         database = new DatabaseHelper(this);
         DairyController.setDatabase(database);
-
         sharedPreferences = getSharedPreferences(Tag.SP, Context.MODE_PRIVATE);
 
         text_date = findViewById(R.id.field_date);
@@ -67,15 +57,19 @@ public class AddDairyActivity extends AppCompatActivity {
         btn_load = findViewById(R.id.btn_load);
         imageView = findViewById(R.id.img_preview);
 
+        /* start editing section */
         text_date.setText(getCurrentDate());
 
+        /* listener load image
+        *  and go to activity result */
         btn_load.setOnClickListener(v -> {
+            // intent get image from gallery
             Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(gallery, PICK_IMAGE);
         });
 
+        /* listener button add */
         btn_add.setOnClickListener(v -> {
-
             Intent goMainActivity = new Intent(AddDairyActivity.this, MainActivity.class);
             goMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             add();
@@ -106,7 +100,6 @@ public class AddDairyActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -115,7 +108,6 @@ public class AddDairyActivity extends AppCompatActivity {
 
     private String getCurrentDate() {
         Date c = Calendar.getInstance().getTime();
-
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = df.format(c);
 

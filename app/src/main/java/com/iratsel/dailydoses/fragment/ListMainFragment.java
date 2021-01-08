@@ -90,7 +90,7 @@ public class ListMainFragment extends Fragment {
         return view;
     }
 
-    public void fetchData() {
+    private void fetchData() {
         /*res = myDb.insert("dairy", new String[] {
                 "date",
                 "headline",
@@ -121,11 +121,6 @@ public class ListMainFragment extends Fragment {
         adapter = new ListMainAdapter(listMain);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-    }
-
-    public void updateListView() {
-        adapter = new ListMainAdapter(listMain);
-        adapter.notifyDataSetChanged();
     }
 
     /* ALERT FUNCTION */
