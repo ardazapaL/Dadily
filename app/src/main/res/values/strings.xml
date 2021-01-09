@@ -12,4 +12,5 @@
     <string name="prompt_memory">Memory</string>
     <string name="prompt_add_daily">Add Your Daily</string>
     <string name="prompt_add_dairy">Add Your Dairy :)</string>
+    <string name="text_desc_app">Put Your Amazing Daily Here</string>
 </resources>

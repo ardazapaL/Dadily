@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn_logout;
+    private ImageButton btn_logout;
     private ArrayList<ListMainModel> listMain;
     private TabAdapter tabAdapter;
     private TabLayout tabLayout;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.view_pager_main);
         tabLayout = findViewById(R.id.tab_layout_main);
+        btn_logout = findViewById(R.id.btn_logout);
         fab = findViewById(R.id.fab_add);
 
         /* tab icons */
@@ -74,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
 
+        btn_logout.setOnClickListener(v -> {
+            logout();
+        });
         fab.setOnClickListener(v -> {
             Intent goAddDairy = new Intent(MainActivity.this, AddDairyActivity.class);
             startActivity(goAddDairy);
@@ -103,25 +108,5 @@ public class MainActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
         Log.d("LOGOUT", "Logout berhasil" + sharedpreferences.getString("name", null));
-    }
-
-    private void hideSystemUI() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        // Hide the nav bar and status bar
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
-    }
-
-    private void showSystemUI() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 }

@@ -25,15 +25,16 @@
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/primary_dark" />
 
-    <!--<Button
+    <ImageButton
         android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/shape_rounded"
-        android:text="Logout"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingRight="2dp"
+        android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tab_layout_main"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
+        app:layout_constraintTop_toTopOf="@+id/tab_layout_main" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_main"

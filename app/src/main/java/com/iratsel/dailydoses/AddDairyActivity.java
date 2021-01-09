@@ -1,6 +1,7 @@
 package com.iratsel.dailydoses;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class AddDairyActivity extends AppCompatActivity {
 
@@ -33,6 +36,7 @@ public class AddDairyActivity extends AppCompatActivity {
     private Button btn_add, btn_load;
     private Database database;
     private ImageView imageView;
+    final Calendar myCalendar = Calendar.getInstance();
 
     SharedPreferences sharedPreferences;
     Bitmap bitmap = null;
@@ -59,6 +63,25 @@ public class AddDairyActivity extends AppCompatActivity {
 
         /* start editing section */
         text_date.setText(getCurrentDate());
+
+        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+        };
+
+        text_date.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(AddDairyActivity.this, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
 
         /* listener load image
         *  and go to activity result */
@@ -108,10 +131,17 @@ public class AddDairyActivity extends AppCompatActivity {
 
     private String getCurrentDate() {
         Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = df.format(c);
 
         return formattedDate;
+    }
+
+    private void updateLabel() {
+        String myFormat = "dd/MM/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        text_date.setText(sdf.format(myCalendar.getTime()));
     }
 
     private boolean add() {

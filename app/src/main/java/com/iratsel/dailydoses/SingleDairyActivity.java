@@ -2,12 +2,16 @@ package com.iratsel.dailydoses;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +23,9 @@ import com.iratsel.dailydoses.utils.DatabaseHelper;
 import com.iratsel.dailydoses.utils.Tag;
 import com.iratsel.dailydoses.utils.Utility;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SingleDairyActivity extends AppCompatActivity {
@@ -28,8 +35,9 @@ public class SingleDairyActivity extends AppCompatActivity {
     private Button btn_update, btn_delete;
     private String headline, date, desc;
 
+    private ContentValues content;
     private int post_id;
-    private byte[] blob;
+    private byte[] blob, img;
     private DatabaseHelper myDb;
     private Cursor res;
     private SharedPreferences sharedPreferences;
@@ -50,6 +58,7 @@ public class SingleDairyActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(Tag.SP, Context.MODE_PRIVATE);
         myDb = new DatabaseHelper(this);
+        content = new ContentValues();
 
         String email = sharedPreferences.getString("email", null);
         post_id = getIntent().getIntExtra("post_id", 0);
@@ -63,6 +72,8 @@ public class SingleDairyActivity extends AppCompatActivity {
         }
         res.close();
 
+        img = blob; // default if user didn't change image
+
         /* set data from cursor */
         edit_img.setImageBitmap(Utility.getPhoto(blob));
         txt_headline.setText(headline);
@@ -75,10 +86,39 @@ public class SingleDairyActivity extends AppCompatActivity {
             updateData();
         });
 
+        edit_img.setOnClickListener(v -> {
+            // intent get image from gallery
+            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(gallery, 100);
+        });
+
         btn_delete.setOnClickListener(v -> {
             // DELETE DATA
             deleteData();
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /*if (resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+        }*/
+        if(resultCode== Activity.RESULT_OK && data !=null) {
+            Uri selectedImage = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                img = bos.toByteArray();
+                edit_img.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void updateData() {
@@ -86,8 +126,8 @@ public class SingleDairyActivity extends AppCompatActivity {
         String mDate = txt_date.getText().toString();
         String mDesc = txt_desc.getText().toString();
 
-        ContentValues content = new ContentValues();
         content.put("_id", post_id);
+        content.put("image", img);
         content.put("headline", mHeadline);
         content.put("date", mDate);
         content.put("description", mDesc);

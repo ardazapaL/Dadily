@@ -48,7 +48,6 @@ public class MemoryFragment extends Fragment {
         sharedPreferences = this.getActivity().getSharedPreferences(Tag.SP, Context.MODE_PRIVATE);
         gridList = new ArrayList<>();
 
-        Button btn_logout = view.findViewById(R.id.btn_logout);
         RecyclerView recyclerView = view.findViewById(R.id.memory_recycler);
 
         /* set recyclerview */
@@ -61,7 +60,6 @@ public class MemoryFragment extends Fragment {
         DatabaseHelper myDb = new DatabaseHelper(getActivity());
         res = myDb.getAllDairy(email);
         fetchData();
-        btn_logout.setOnClickListener(v -> logout());
         return view;
     }
 
@@ -72,13 +70,5 @@ public class MemoryFragment extends Fragment {
             gridList.add(new GridItemModel(Utility.getPhoto(blob)));
         }
         res.close();
-    }
-
-    private void logout() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        sharedPreferences.edit().clear().commit();
-        getActivity().finish();
-        startActivity(intent);
-        Log.d("LOGOUT", "Logout berhasil" + sharedPreferences.getString("name", null));
     }
 }
