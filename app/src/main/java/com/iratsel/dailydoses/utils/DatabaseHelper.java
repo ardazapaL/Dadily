@@ -91,6 +91,11 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Database {
         }
     }
 
+    public Cursor getAllDairy() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM dairy", null);  return res;
+    }
+
     public Cursor getAllDairy(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT * FROM dairy WHERE email = '" + email + "'", null);  return res;

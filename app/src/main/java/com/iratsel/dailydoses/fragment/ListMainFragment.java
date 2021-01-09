@@ -1,12 +1,16 @@
 package com.iratsel.dailydoses.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.iratsel.dailydoses.LoginActivity;
+import com.iratsel.dailydoses.MainActivity;
 import com.iratsel.dailydoses.R;
+import com.iratsel.dailydoses.SingleDairyActivity;
 import com.iratsel.dailydoses.adapter.ListMainAdapter;
 import com.iratsel.dailydoses.controllers.DairyController;
 import com.iratsel.dailydoses.model.ListMainModel;
@@ -54,15 +61,6 @@ public class ListMainFragment extends Fragment {
 
         String email = sharedPreferences.getString("email", null);
 
-        //addData();
-        res = myDb.getAllDairy(email);
-        if(res.getCount() == 0) {
-            // show message
-            showMessage("Hey you there","Let's make your first dairy ^^");
-        } else {
-            fetchData();
-        }
-
         /* initialize */
         recyclerView = view.findViewById(R.id.main_recycler);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
@@ -72,6 +70,19 @@ public class ListMainFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        //addData();
+        res = myDb.getAllDairy(email);
+        Cursor resTotal = myDb.getAllDairy();
+        if(res.getCount() == 0) {
+            // show message
+            showMessage("Hey you there","Let's make your first dairy ^^");
+        } else {
+            try { fetchData();
+            } catch (Exception e){
+                deleteData(resTotal.getCount());
+            }
+        }
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -85,6 +96,17 @@ public class ListMainFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void deleteData(int lastData) {
+        Boolean deletedRows =
+                myDb.delete("dairy", lastData);
+        if (deletedRows == true){
+            Toast.makeText(getActivity(),
+                    "Image is too BIG! auto delete", Toast.LENGTH_LONG).show();
+        }
+        else
+            Toast.makeText(getActivity(),"Data Failed to Deleted!",Toast.LENGTH_LONG).show();
     }
 
     private void fetchData() {
@@ -115,6 +137,13 @@ public class ListMainFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    private void logout() {
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        sharedPreferences.edit().clear().commit();
+        getActivity().finish();
+        startActivity(intent);
+    }
+
     /* ALERT FUNCTION */
     public void showMessage(String title, String Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());  builder.setCancelable(true);
@@ -122,5 +151,4 @@ public class ListMainFragment extends Fragment {
         builder.setMessage(Message);
         builder.show();
     }
-
 }

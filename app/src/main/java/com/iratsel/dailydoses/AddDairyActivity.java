@@ -43,7 +43,6 @@ public class AddDairyActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     Bitmap bitmap = null;
     byte img[];
-
     private static int PICK_IMAGE = 100;
 
     @Override
@@ -72,7 +71,6 @@ public class AddDairyActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                // TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -81,7 +79,6 @@ public class AddDairyActivity extends AppCompatActivity {
         };
 
         text_date.setOnClickListener(v -> {
-            // TODO Auto-generated method stub
             new DatePickerDialog(AddDairyActivity.this, date, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();

@@ -13,4 +13,5 @@
     <string name="prompt_add_daily">Add Your Daily</string>
     <string name="prompt_add_dairy">Add Your Dairy :)</string>
     <string name="text_desc_app">Put Your Amazing Daily Here</string>
+    <string name="warning_big_image">Big picture may crash the app</string>
 </resources>
