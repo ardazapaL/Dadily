@@ -3,7 +3,6 @@ package com.iratsel.dailydoses.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.iratsel.dailydoses.MainActivity;
 import com.iratsel.dailydoses.R;
 import com.iratsel.dailydoses.adapter.ListMainAdapter;
 import com.iratsel.dailydoses.controllers.DairyController;
-import com.iratsel.dailydoses.controllers.UserController;
 import com.iratsel.dailydoses.model.ListMainModel;
 import com.iratsel.dailydoses.utils.Database;
 import com.iratsel.dailydoses.utils.DatabaseHelper;
@@ -91,18 +87,15 @@ public class ListMainFragment extends Fragment {
     }
 
     private void fetchData() {
-        /*res = myDb.insert("dairy", new String[] {
-                "date",
-                "headline",
-                "desc"}, null, null, null);*/
 
         while(res.moveToNext()){
+            int id = res.getInt(0);
             byte[] blob = res.getBlob(2);
             String date = res.getString(3);
             String headline = res.getString(4);
             String desc = res.getString(5);
 
-            listMain.add(new ListMainModel(Utility.getPhoto(blob), date, headline, desc));
+            listMain.add(new ListMainModel(id, Utility.getPhoto(blob), date, headline, desc));
         }
         res.close();
     }

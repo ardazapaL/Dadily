@@ -4,12 +4,14 @@ import android.graphics.Bitmap;
 
 public class ListMainModel {
 
+    private int id;
     private Bitmap image;
     private String date;
     private String headline;
     private String description;
 
-    public ListMainModel(Bitmap image, String date, String headline, String description) {
+    public ListMainModel(int id, Bitmap image, String date, String headline, String description) {
+        this.id = id;
         this.image = image;
         this.date = date;
         this.headline = headline;
@@ -46,5 +48,13 @@ public class ListMainModel {
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
