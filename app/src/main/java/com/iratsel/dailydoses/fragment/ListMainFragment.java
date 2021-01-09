@@ -78,6 +78,7 @@ public class ListMainFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
+                fetchData();
                 adapter = new ListMainAdapter(listMain);
                 adapter.notifyDataSetChanged();
                 recyclerView.setAdapter(adapter);
@@ -103,7 +104,6 @@ public class ListMainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapter = new ListMainAdapter(listMain);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
     }
@@ -111,7 +111,6 @@ public class ListMainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        adapter = new ListMainAdapter(listMain);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
     }
