@@ -146,8 +146,10 @@ public class LoginFragment extends Fragment {
                 getActivity().finish();
                 startActivity(intent);
             } else {
-                editTextPass.setError(getString(R.string.prompt_fill_password)); //TEST
-                editTextPass.requestFocus();
+                editTextEmail.setText("");
+                editTextPass.setText("");
+                editTextEmail.setError("Account not found");
+                editTextEmail.requestFocus();
             }
         }
         @Override

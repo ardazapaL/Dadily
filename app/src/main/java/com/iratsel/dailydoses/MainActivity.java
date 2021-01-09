@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -84,17 +85,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(goAddDairy);
             Log.d("PRESSED", "FAB IS PRESSED");
         });
-
-        /*ListMainFragment listMainFragment = new ListMainFragment();
-        listMainFragment.updateListView();*/
     }
-
-    /*@Override
-    protected void onResume() {
-        super.onResume();
-        ListMainFragment listMainFragment = new ListMainFragment();
-        listMainFragment.updateListView();
-    }*/
 
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
@@ -107,6 +98,6 @@ public class MainActivity extends AppCompatActivity {
         sharedpreferences.edit().clear().commit();
         finish();
         startActivity(intent);
-        Log.d("LOGOUT", "Logout berhasil" + sharedpreferences.getString("name", null));
+        Toast.makeText(this, "You Logged Out", Toast.LENGTH_SHORT).show();
     }
 }

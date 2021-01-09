@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +22,7 @@ import com.iratsel.dailydoses.controllers.DairyController;
 import com.iratsel.dailydoses.utils.Database;
 import com.iratsel.dailydoses.utils.DatabaseHelper;
 import com.iratsel.dailydoses.utils.Tag;
+import com.iratsel.dailydoses.utils.Utility;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -60,6 +62,8 @@ public class AddDairyActivity extends AppCompatActivity {
         btn_add = findViewById(R.id.btn_add);
         btn_load = findViewById(R.id.btn_load);
         imageView = findViewById(R.id.img_preview);
+
+        imageView.setImageResource(R.drawable.ic_diary);
 
         /* start editing section */
         text_date.setText(getCurrentDate());
@@ -150,7 +154,14 @@ public class AddDairyActivity extends AppCompatActivity {
         String headline = text_headline.getText().toString();
         String desc = text_desc.getText().toString();
 
-//        Bitmap bitmap = BitmapFactory.decodeByteArray(imageView, 0, imageView.l)
+        if (img == null) {
+            /* get byte for default image on dairy */
+            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            img = byteArrayOutputStream.toByteArray();
+        }
+
         ContentValues contentValues = new ContentValues();
         contentValues.put("image", img);
         contentValues.put("email", email);
